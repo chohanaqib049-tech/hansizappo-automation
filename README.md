@@ -17,13 +17,14 @@ A zero-budget cloud workflow for producing Urdu-narrated movie-explainer drafts.
 3. Choose **Run workflow**.
 4. Download the artifact named `hansizappo-movie-teller-video`.
 
-A push to the main branch also starts a build automatically.
+A push to the main branch also starts a build automatically. YouTube upload is never triggered by a push. It is available only when manually running the workflow and explicitly checking the `upload_to_youtube` option; the upload script always sets visibility to **private**.
 
 ## Zero-budget and copyright notes
-No paid API, subscription, billing account, or paid credit is configured. GitHub-hosted runners are temporary and subject to free-tier limits; this is scheduled job execution, not an always-on server. The narration is original commentary and the visuals are original illustrations rather than copied frames from Interstellar. This is a review draft, not an automatically published YouTube upload. Publishing requires a separate approval.
+No paid API, subscription, billing account, or paid credit is configured. GitHub-hosted runners are temporary and subject to free-tier limits; this is scheduled job execution, not an always-on server. The narration is original commentary and the visuals are original illustrations rather than copied frames from Interstellar. This is a review draft, not an automatically published YouTube upload. Publishing publicly requires a separate owner action in YouTube Studio. The optional API upload is private-only. It requires GitHub Actions secrets named `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, and `YOUTUBE_REFRESH_TOKEN`; never commit or paste these values into chat.
 
 ## Files
-- `.github/workflows/build-video.yml`: cloud workflow
+- `.github/workflows/build-video.yml`: cloud workflow with manual, opt-in private upload
+- `scripts/upload_youtube.py`: YouTube Data API uploader (private-only)
 - `episodes/episode-001.json`: Interstellar narration and Roman Urdu scene-card captions
 - `scripts/build_video.py`: offline voice-over and MP4 renderer
 - `publishing/interstellar-episode-001-metadata.json`: YouTube title, description, tags and publishing notes
