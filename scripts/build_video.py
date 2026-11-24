@@ -118,7 +118,7 @@ def main():
 
     concat_file = WORK / "concat.txt"
     concat_file.write_text(
-        "".join(f"file '{path.as_posix()}'\\n" for path in rendered),
+        "".join(f"file '{path.as_posix()}'\n" for path in rendered),
         encoding="utf-8"
     )
     safe_title = re.sub(r"[^a-zA-Z0-9_-]+", "-", data.get("title", "movie-teller")).strip("-")
