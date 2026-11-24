@@ -1,18 +1,18 @@
 {
   "title": "Movie Teller - Episode 001 Sample",
-  "voice": "ur-PK-AsadNeural",
+  "voice": "ur_PK-fasih-medium",
   "segments": [
     {
       "caption": "HansiZappo Movie Teller",
-      "text": "Assalam o alaikum! HansiZappo Movie Teller mein khush aamdeed. Yeh hamari pehli video ka sample narration hai. Asal movie ki kahani aur research final hone ke baad is text ko replace kiya jayega."
+      "text_urdu": "السلام علیکم! ہنسی زاپو مووی ٹیلر میں خوش آمدید۔ یہ ہماری پہلی ویڈیو کا نمونہ ہے۔ اصل فلم کی کہانی اور تحقیق مکمل ہونے کے بعد اس متن کو تبدیل کیا جائے گا۔"
     },
     {
       "caption": "Kahani shuru hoti hai",
-      "text": "Is jagah par movie ki kahani ka pehla hissa Roman Urdu mein likha jayega. Har hissa alag scene card aur voice-over ke saath video mein shamil hoga."
+      "text_urdu": "اس جگہ پر فلم کی کہانی کا پہلا حصہ اردو میں بیان کیا جائے گا۔ ہر حصے کے لیے الگ منظر اور وائس اوور ویڈیو میں شامل ہوگا۔"
     },
     {
       "caption": "Yeh sirf test hai",
-      "text": "Yeh filhaal rendering system ko test karne ke liye sample hai. Isay final movie explanation na samjhein."
+      "text_urdu": "یہ فی الحال ویڈیو بنانے کے نظام کو جانچنے کے لیے ایک نمونہ ہے۔ اسے فلم کی مکمل وضاحت نہ سمجھیں۔"
     }
   ]
 }
