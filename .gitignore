@@ -1,0 +1,13 @@
+# Local Google OAuth credentials and tokens - NEVER COMMIT
+client_secret*.json
+client_secret.json
+youtube-token*.json
+token.json
+
+# Python and generated media
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+output/
+models/
