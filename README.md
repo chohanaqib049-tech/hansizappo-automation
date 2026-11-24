@@ -3,7 +3,7 @@
 A zero-budget cloud workflow for producing Urdu-narrated movie-explainer drafts.
 
 ## Current episode
-- Film: Interstellar (2014)
+- Latest episode: The Martian (2015), Episode 002; Interstellar remains Episode 001
 - Format: full-story explanation with spoilers and ending interpretation
 - Voice: offline Piper Urdu voice (ur_PK-fasih-medium); narration input is Urdu script and spoken output is Pakistani Urdu
 - Scene cards: Roman Urdu
@@ -13,7 +13,7 @@ A zero-budget cloud workflow for producing Urdu-narrated movie-explainer drafts.
 
 ## Run it
 1. Open the **Actions** tab.
-2. Select **Build Movie Teller Video**.
+2. Select **Build Movie Teller Video** and set `episode_file` to `episodes/episode-002.json`.
 3. Choose **Run workflow**.
 4. Download the artifact named `hansizappo-movie-teller-video`.
 
@@ -25,7 +25,7 @@ No paid API, subscription, billing account, or paid credit is configured. GitHub
 ## Files
 - `.github/workflows/build-video.yml`: cloud workflow with manual, opt-in private upload
 - `scripts/upload_youtube.py`: YouTube Data API uploader (private-only)
-- `episodes/episode-001.json`: Interstellar narration and Roman Urdu scene-card captions
+- `episodes/episode-001.json`: Interstellar narration; `episodes/episode-002.json`: The Martian narration and Roman Urdu scene-card captions
 - `scripts/build_video.py`: offline voice-over and MP4 renderer
-- `publishing/interstellar-episode-001-metadata.json`: YouTube title, description, tags and publishing notes
+- `publishing/the-martian-episode-002-metadata.json`: The Martian YouTube metadata
 - `requirements.txt`: Python dependencies

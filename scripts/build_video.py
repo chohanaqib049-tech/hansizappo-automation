@@ -93,6 +93,60 @@ def make_card(caption, visual, index, total, destination):
         draw.line((cx,cy,cx-20,cy-90), fill=(245,235,210), width=8)
         draw.line((cx,cy,cx+85,cy+25), fill=(245,235,210), width=6)
         draw.ellipse((cx-12,cy-12,cx+12,cy+12), fill=(245,235,210))
+
+    elif visual in ("mars", "astronaut", "habitat", "storm", "rover", "farm", "rescue", "ship", "sunrise"):
+        # Original illustrated Mars environments; no film stills or actor likenesses.
+        mars = (150, 62, 38)
+        draw.ellipse((cx-300, cy-245, cx+300, cy+355), fill=mars, outline=(225,145,105), width=6)
+        draw.ellipse((cx-340, cy+185, cx+340, cy+390), fill=(92,38,30))
+        for k in range(12):
+            x = 610 + (k*83)%650
+            y = 440 + (k*47)%220
+            draw.ellipse((x,y,x+18,y+8), fill=(185,105,75))
+        if visual == "mars":
+            draw.ellipse((cx-90,cy-120,cx+80,cy+30), fill=(225,155,105))
+            draw.arc((cx-300,cy-250,cx+300,cy+350), 205, 335, fill=(245,190,150), width=8)
+        elif visual == "astronaut":
+            draw.ellipse((cx-72,cy-190,cx+72,cy-46), fill=(205,215,220), outline=(245,245,245), width=7)
+            draw.rounded_rectangle((cx-105,cy-55,cx+105,cy+215), radius=55, fill=(190,200,205), outline=(245,245,245), width=7)
+            draw.ellipse((cx-48,cy-168,cx+48,cy-72), fill=(20,45,65))
+            draw.line((cx-80,cy+10,cx-180,cy+130), fill=(210,220,225), width=28)
+            draw.line((cx+80,cy+10,cx+180,cy+130), fill=(210,220,225), width=28)
+        elif visual == "habitat":
+            draw.polygon([(cx-245,cy+180),(cx-170,cy-25),(cx+170,cy-25),(cx+245,cy+180)], fill=(105,125,135), outline=(230,230,220))
+            draw.rectangle((cx-200,cy+45,cx+200,cy+180), fill=(55,75,85), outline=(220,225,220), width=7)
+            draw.ellipse((cx-55,cy+55,cx+55,cy+165), fill=(35,90,65), outline=(175,205,160), width=5)
+        elif visual == "storm":
+            for k in range(9):
+                x = 520 + k*95
+                draw.arc((x,cy-220,x+340,cy+250), 190, 350, fill=(205,115,75), width=24)
+            draw.polygon([(0,430),(WIDTH,350),(WIDTH,HEIGHT),(0,HEIGHT)], fill=(125,55,35))
+        elif visual == "rover":
+            draw.ellipse((cx-170,cy+95,cx-65,cy+200), fill=(30,35,40), outline=(210,210,200), width=7)
+            draw.ellipse((cx+65,cy+95,cx+170,cy+200), fill=(30,35,40), outline=(210,210,200), width=7)
+            draw.rounded_rectangle((cx-185,cy-10,cx+185,cy+115), radius=28, fill=(175,185,175), outline=(240,240,225), width=7)
+            draw.rectangle((cx-90,cy-115,cx+90,cy-10), fill=(90,135,155), outline=(230,230,220), width=6)
+            draw.line((cx,cy-115,cx+85,cy-235), fill=(220,225,220), width=9)
+        elif visual == "farm":
+            draw.rectangle((cx-210,cy-90,cx+210,cy+200), fill=(28,65,48), outline=(180,205,170), width=8)
+            for k in range(6):
+                x = cx-165+k*65
+                draw.line((x,cy+155,x,cy-15), fill=(90,180,95), width=12)
+                draw.ellipse((x-34,cy-30,x+5,cy+18), fill=(110,195,105))
+                draw.ellipse((x+3,cy+20,x+42,cy+65), fill=(85,160,85))
+        elif visual == "rescue":
+            draw.ellipse((cx-115,cy-115,cx+115,cy+115), fill=(75,100,135), outline=(230,230,230), width=7)
+            draw.polygon([(cx-300,cy+20),(cx-80,cy-40),(cx+290,cy+35),(cx+70,cy+95)], fill=(185,195,205), outline=(245,245,245))
+            draw.line((cx-280,cy-90,cx-125,cy-35), fill=(225,225,225), width=12)
+        elif visual == "ship":
+            draw.polygon([(cx,cy-245),(cx-95,cy+120),(cx,cy+205),(cx+95,cy+120)], fill=(190,200,210), outline=(245,245,245))
+            draw.rectangle((cx-65,cy-40,cx+65,cy+55), fill=(70,125,155), outline=(245,245,245), width=6)
+            draw.polygon([(cx-95,cy+100),(cx-190,cy+185),(cx-70,cy+160)], fill=(190,90,45))
+            draw.polygon([(cx+95,cy+100),(cx+190,cy+185),(cx+70,cy+160)], fill=(190,90,45))
+        elif visual == "sunrise":
+            draw.ellipse((cx-180,cy-180,cx+180,cy+180), fill=(245,170,95))
+            draw.rectangle((0,cy+80,WIDTH,HEIGHT), fill=(75,34,29))
+            draw.polygon([(0,cy+100),(280,cy-30),(500,cy+100),(780,cy-20),(WIDTH,cy+90),(WIDTH,HEIGHT),(0,HEIGHT)], fill=(105,48,36))
     else:
         draw.ellipse((cx-180,cy-180,cx+180,cy+180), fill=(40,75,135), outline=(170,200,240), width=5)
 

@@ -3,6 +3,11 @@ name: Build Movie Teller Video
 on:
   workflow_dispatch:
     inputs:
+      episode_file:
+        description: "Episode JSON path to render"
+        required: true
+        type: string
+        default: "episodes/episode-002.json"
       upload_to_youtube:
         description: "Upload the rendered video to YouTube as PRIVATE (never public automatically)"
         required: true
@@ -42,7 +47,7 @@ jobs:
           curl -fL --retry 3 "https://huggingface.co/rhasspy/piper-voices/resolve/main/ur/ur_PK/fasih/medium/ur_PK-fasih-medium.onnx.json" -o models/ur_PK-fasih-medium.onnx.json
 
       - name: Render video
-        run: python scripts/build_video.py episodes/episode-001.json
+        run: python scripts/build_video.py "${{ inputs.episode_file || 'episodes/episode-002.json' }}"
 
       - name: Upload to YouTube privately (manual opt-in only)
         if: github.event_name == 'workflow_dispatch' && inputs.upload_to_youtube == true
@@ -51,7 +56,7 @@ jobs:
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
         run: |
-          python scripts/upload_youtube.py output/*.mp4 publishing/interstellar-episode-001-metadata.json
+          python scripts/upload_youtube.py output/*.mp4 publishing/the-martian-episode-002-metadata.json
 
       - name: Save rendered video
         if: always()
