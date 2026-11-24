@@ -1,25 +1,28 @@
 # HansiZappo Movie Teller Automation
 
-A free-tier cloud workflow for producing Roman Urdu narrated video drafts.
+A zero-budget cloud workflow for producing Urdu-narrated movie-explainer drafts.
 
-## Current workflow
-- GitHub Actions runs in the cloud when manually triggered from the Actions tab.
-- Python creates original star-field cards for each narration segment.
-- Edge TTS generates Urdu voice-over.
-- FFmpeg combines the cards and narration into an MP4.
-- The MP4 is saved as a GitHub Actions artifact for 7 days.
+## Current episode
+- Film: Interstellar (2014)
+- Format: full-story explanation with spoilers and ending interpretation
+- Audience and narration style: Pakistani Urdu storytelling
+- Voice: offline Piper Urdu voice (ur_PK-fasih-medium)
+- Visuals: original scene-inspired illustrations generated with Pillow; no movie footage or copyrighted film stills are embedded
+- Output: 1280x720 MP4 assembled with FFmpeg
 
 ## Run it
-1. Replace the sample narration in `episodes/episode-001.json` with an approved script.
-2. Open the **Actions** tab.
-3. Select **Build Movie Teller Video** and choose **Run workflow**.
+1. Open the **Actions** tab.
+2. Select **Build Movie Teller Video**.
+3. Choose **Run workflow**.
 4. Download the artifact named `hansizappo-movie-teller-video`.
 
-## Current limitations
-This is the first rendering stage only. It does not yet research movies, create movie footage, make thumbnails, or upload to YouTube. No paid API, subscription, billing account, or paid credit is configured. GitHub-hosted runners are temporary and subject to free-tier limits; this is scheduled job execution, not an always-on server. The renderer currently uses original generated cards, not movie clips.
+A push to the main branch also starts a build automatically.
+
+## Zero-budget and copyright notes
+No paid API, subscription, billing account, or paid credit is configured. GitHub-hosted runners are temporary and subject to free-tier limits; this is scheduled job execution, not an always-on server. The narration is original commentary and the visuals are original illustrations rather than copied frames from Interstellar. This is a draft for review, not an automatically published YouTube upload. Publishing requires a separate approval.
 
 ## Files
 - `.github/workflows/build-video.yml`: cloud workflow
-- `episodes/episode-001.json`: narration input
-- `scripts/build_video.py`: voice-over and MP4 renderer
+- `episodes/episode-001.json`: Interstellar narration and scene plan
+- `scripts/build_video.py`: offline voice-over and MP4 renderer
 - `requirements.txt`: Python dependencies
