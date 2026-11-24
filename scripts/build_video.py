@@ -186,6 +186,80 @@ def make_voice(text, destination):
     ])
 
 
+def probe_duration(path):
+    result = subprocess.run(
+        ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+         "-of", "default=noprint_wrappers=1:nokey=1", str(path)],
+        check=True, capture_output=True, text=True
+    )
+    return float(result.stdout.strip())
+
+
+def choose_visual(sentence, fallback):
+    rules = [
+        (("طوفان", "گرد", "دھول", "آندھی"), "storm"),
+        (("خلائی جہاز", "راکٹ", "جہاز", "لانچ"), "ship"),
+        (("آلو", "فصل", "پود", "کھاد", "کھیتی", "خوراک"), "farm"),
+        (("ناسا", "سائنس دان", "زمین", "دنیا"), "nasa"),
+        (("روور", "کیمرہ", "رابطہ", "پیغام", "تصویر"), "rover"),
+        (("ہیبی ٹیٹ", "رہائشی مرکز", "مرکز", "گھر"), "habitat"),
+        (("بچاؤ", "بچانے", "امداد", "ساتھی", "عملے", "کمانڈر"), "rescue"),
+        (("خلا باز", "مارک", "لباس", "زخم", "اکیلا"), "astronaut"),
+        (("مریخ", "سیارہ", "صحرا", "سرخ مٹی"), "mars"),
+    ]
+    for words, visual in rules:
+        if any(word in sentence for word in words):
+            return visual
+    return fallback if fallback in {"mars", "astronaut", "habitat", "storm", "rover", "farm", "rescue", "ship", "sunrise"} else "mars"
+
+
+def scene_label(visual):
+    return {
+        "mars": "MARS KA MANZAR", "astronaut": "AKELA ASTRONAUT",
+        "habitat": "REHAISHI MARKAZ", "storm": "MARS KA TOOFAN",
+        "rover": "ROVER AUR RABTA", "farm": "MARS PAR KHETI",
+        "rescue": "BACHAO KA MISSION", "ship": "KHALAI JAHAAZ",
+        "sunrise": "UMEED KI KIRAN",
+    }.get(visual, "MOVIE TELLER")
+
+
+def render_visual_story(segment, index, total, narration, audio_path):
+    # Split the narration into sentence-led shots so the image changes with the spoken story.
+    sentences = [part.strip() for part in re.split(r"(?<=[۔!?؟])\\s*", narration) if part.strip()]
+    if not sentences:
+        sentences = [narration]
+    duration = probe_duration(audio_path)
+    weights = [max(1, len(part)) for part in sentences]
+    total_weight = sum(weights)
+    shot_paths = []
+    elapsed = 0.0
+
+    for shot_no, sentence in enumerate(sentences, start=1):
+        shot_duration = duration - elapsed if shot_no == len(sentences) else duration * weights[shot_no-1] / total_weight
+        elapsed += shot_duration
+        visual = choose_visual(sentence, segment.get("visual", "mars"))
+        image_path = WORK / f"shot-{index:03d}-{shot_no:02d}.png"
+        video_path = WORK / f"shot-{index:03d}-{shot_no:02d}.mp4"
+        make_card(scene_label(visual), visual, index, total, image_path)
+        frames = max(1, round(shot_duration * 25))
+        run([
+            "ffmpeg", "-y", "-loop", "1", "-framerate", "25", "-i", str(image_path),
+            "-frames:v", str(frames),
+            "-vf", "zoompan=z='min(zoom+0.0008,1.07)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1280x720:fps=25,format=yuv420p",
+            "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "22", str(video_path)
+        ])
+        shot_paths.append(video_path)
+
+    concat_file = WORK / f"shots-{index:03d}.txt"
+    concat_file.write_text("".join(f"file '{path.as_posix()}'\\n" for path in shot_paths), encoding="utf-8")
+    silent_path = WORK / f"silent-{index:03d}.mp4"
+    segment_path = WORK / f"part-{index:03d}.mp4"
+    run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_file),
+         "-c", "copy", str(silent_path)])
+    run(["ffmpeg", "-y", "-i", str(silent_path), "-i", str(audio_path),
+         "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-shortest", str(segment_path)])
+    return segment_path
+
 def main():
     if len(sys.argv) != 2:
         raise SystemExit("Usage: python scripts/build_video.py episodes/episode-001.json")
@@ -208,17 +282,10 @@ def main():
             raise SystemExit(
                 f"Segment {index} has no text_urdu. Piper Urdu requires Urdu-script narration."
             )
-        image_path = WORK / f"card-{index:03d}.png"
         audio_path = WORK / f"voice-{index:03d}.wav"
-        video_path = WORK / f"part-{index:03d}.mp4"
 
-        make_card(segment.get("caption", ""), segment.get("visual", "space"), index, len(segments), image_path)
         make_voice(narration, audio_path)
-        run([
-            "ffmpeg", "-y", "-loop", "1", "-i", str(image_path), "-i", str(audio_path),
-            "-c:v", "libx264", "-tune", "stillimage", "-c:a", "aac", "-b:a", "128k",
-            "-pix_fmt", "yuv420p", "-shortest", "-r", "25", str(video_path)
-        ])
+        video_path = render_visual_story(segment, index, len(segments), narration, audio_path)
         rendered.append(video_path)
 
     concat_file = WORK / "concat.txt"
