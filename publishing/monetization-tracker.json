@@ -1,0 +1,40 @@
+{
+  "channel": "HansiZappo",
+  "program": "YouTube Partner Program",
+  "status": "tracking_only_not_applied",
+  "targets": {
+    "ad_revenue": {
+      "subscribers": 1000,
+      "valid_public_watch_hours_last_12_months": 4000,
+      "alternative_valid_public_shorts_views_last_90_days": 10000000
+    },
+    "expanded_ypp_where_available": {
+      "subscribers": 500,
+      "valid_public_uploads_last_90_days": 3,
+      "valid_public_watch_hours_last_12_months": 3000,
+      "alternative_valid_public_shorts_views_last_90_days": 3000000
+    }
+  },
+  "requirements_checklist": {
+    "supported_country_or_region": "verify_in_youtube_studio",
+    "no_active_community_guidelines_strikes": "verify_in_youtube_studio",
+    "two_step_verification": "verify",
+    "advanced_features_access": "verify",
+    "adsense_for_youtube_linked": "verify_when_eligible",
+    "monetization_policy_compliance": "ongoing"
+  },
+  "metrics_to_update_daily": [
+    "subscribers",
+    "valid_public_watch_hours_last_12_months",
+    "valid_public_shorts_views_last_90_days",
+    "public_uploads_last_90_days",
+    "views",
+    "watch_time",
+    "average_view_duration",
+    "audience_retention",
+    "copyright_claims",
+    "community_guidelines_strikes",
+    "upload_status"
+  ],
+  "approval_note": "YouTube decides monetization eligibility after review. Never fabricate location, identity, address, tax, or payment information."
+}
