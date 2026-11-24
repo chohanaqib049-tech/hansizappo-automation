@@ -1,16 +1,15 @@
-import asyncio
 import json
 import re
 import subprocess
 import sys
 from pathlib import Path
 
-import edge_tts
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "output"
 WORK = OUTPUT / "segments"
+VOICE_MODEL = ROOT / "models" / "ur_PK-fasih-medium.onnx"
 WIDTH, HEIGHT = 1280, 720
 
 
@@ -71,8 +70,15 @@ def make_card(caption, index, total, destination):
     image.save(destination)
 
 
-async def make_voice(text, voice, destination):
-    await edge_tts.Communicate(text=text, voice=voice).save(str(destination))
+def make_voice(text, destination):
+    if not VOICE_MODEL.exists():
+        raise FileNotFoundError(f"Urdu Piper voice model missing: {VOICE_MODEL}")
+    run([
+        sys.executable, "-m", "piper",
+        "-m", str(VOICE_MODEL),
+        "-f", str(destination),
+        "--", text
+    ])
 
 
 def main():
@@ -89,19 +95,20 @@ def main():
 
     OUTPUT.mkdir(exist_ok=True)
     WORK.mkdir(parents=True, exist_ok=True)
-    voice = data.get("voice", "ur-PK-AsadNeural")
     rendered = []
 
     for index, segment in enumerate(segments, start=1):
-        narration = segment.get("text", "").strip()
+        narration = segment.get("text_urdu", "").strip()
         if not narration:
-            raise SystemExit(f"Segment {index} has empty narration.")
+            raise SystemExit(
+                f"Segment {index} has no text_urdu. Piper Urdu requires Urdu-script narration."
+            )
         image_path = WORK / f"card-{index:03d}.png"
-        audio_path = WORK / f"voice-{index:03d}.mp3"
+        audio_path = WORK / f"voice-{index:03d}.wav"
         video_path = WORK / f"part-{index:03d}.mp4"
 
         make_card(segment.get("caption", ""), index, len(segments), image_path)
-        asyncio.run(make_voice(narration, voice, audio_path))
+        make_voice(narration, audio_path)
         run([
             "ffmpeg", "-y", "-loop", "1", "-i", str(image_path), "-i", str(audio_path),
             "-c:v", "libx264", "-tune", "stillimage", "-c:a", "aac", "-b:a", "128k",
@@ -111,7 +118,7 @@ def main():
 
     concat_file = WORK / "concat.txt"
     concat_file.write_text(
-        "".join(f"file '{path.as_posix()}'\n" for path in rendered),
+        "".join(f"file '{path.as_posix()}'\\n" for path in rendered),
         encoding="utf-8"
     )
     safe_title = re.sub(r"[^a-zA-Z0-9_-]+", "-", data.get("title", "movie-teller")).strip("-")
