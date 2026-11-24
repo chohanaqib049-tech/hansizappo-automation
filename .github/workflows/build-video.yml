@@ -27,6 +27,12 @@ jobs:
       - name: Install Python packages
         run: python -m pip install --upgrade pip && pip install -r requirements.txt
 
+      - name: Download free Urdu voice model
+        run: |
+          mkdir -p models
+          curl -fL --retry 3 "https://huggingface.co/rhasspy/piper-voices/resolve/main/ur/ur_PK/fasih/medium/ur_PK-fasih-medium.onnx" -o models/ur_PK-fasih-medium.onnx
+          curl -fL --retry 3 "https://huggingface.co/rhasspy/piper-voices/resolve/main/ur/ur_PK/fasih/medium/ur_PK-fasih-medium.onnx.json" -o models/ur_PK-fasih-medium.onnx.json
+
       - name: Render video
         run: python scripts/build_video.py episodes/episode-001.json
 
