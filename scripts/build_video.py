@@ -225,7 +225,7 @@ def scene_label(visual):
 
 def render_visual_story(segment, index, total, narration, audio_path):
     # Split the narration into sentence-led shots so the image changes with the spoken story.
-    sentences = [part.strip() for part in re.split(r"(?<=[۔!?؟])\\s*", narration) if part.strip()]
+    sentences = [part.strip() for part in re.split(r"(?<=[۔!?؟])\s*", narration) if part.strip()]
     if not sentences:
         sentences = [narration]
     duration = probe_duration(audio_path)
@@ -251,7 +251,7 @@ def render_visual_story(segment, index, total, narration, audio_path):
         shot_paths.append(video_path)
 
     concat_file = WORK / f"shots-{index:03d}.txt"
-    concat_file.write_text("".join(f"file '{path.as_posix()}'\\n" for path in shot_paths), encoding="utf-8")
+    concat_file.write_text("".join(f"file '{path.as_posix()}'\n" for path in shot_paths), encoding="utf-8")
     silent_path = WORK / f"silent-{index:03d}.mp4"
     segment_path = WORK / f"part-{index:03d}.mp4"
     run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_file),
