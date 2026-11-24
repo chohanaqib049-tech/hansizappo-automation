@@ -3,7 +3,7 @@
 A free-tier cloud workflow for producing Roman Urdu narrated video drafts.
 
 ## Current workflow
-- GitHub Actions runs in the cloud (manual trigger or weekly schedule).
+- GitHub Actions runs in the cloud when manually triggered from the Actions tab.
 - Python creates original star-field cards for each narration segment.
 - Edge TTS generates Urdu voice-over.
 - FFmpeg combines the cards and narration into an MP4.
