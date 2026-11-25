@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "output"
 WORK = OUTPUT / "segments"
 VOICE_MODEL = ROOT / "models" / "ur_PK-fasih-medium.onnx"
+MARS_BROLL = ROOT / "assets" / "mars-rover-hazcam.mp4"
 WIDTH, HEIGHT = 1280, 720
 
 
