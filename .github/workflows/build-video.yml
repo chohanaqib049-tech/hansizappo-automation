@@ -43,6 +43,10 @@ jobs:
           mkdir -p models
           curl -fL --retry 3 "https://huggingface.co/rhasspy/piper-voices/resolve/main/ur/ur_PK/fasih/medium/ur_PK-fasih-medium.onnx" -o models/ur_PK-fasih-medium.onnx
           curl -fL --retry 3 "https://huggingface.co/rhasspy/piper-voices/resolve/main/ur/ur_PK/fasih/medium/ur_PK-fasih-medium.onnx.json" -o models/ur_PK-fasih-medium.onnx.json
+      - name: Download free NASA Mars rover footage
+        run: |
+          mkdir -p assets
+          curl -fL --retry 3 "https://svs.gsfc.nasa.gov/vis/a030000/a031200/a031276/MSL_hazcam_timelapse_sol_4002_PIA26209_1080.mp4" -o assets/mars-rover-hazcam.mp4
       - name: Render 10 vertical AAKHRI SIGNAL Shorts
         if: github.event_name == 'push'
         run: python scripts/build_shorts.py
