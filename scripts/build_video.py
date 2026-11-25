@@ -241,6 +241,30 @@ def render_visual_story(segment, index, total, narration, audio_path):
         visual = choose_visual(sentence, segment.get("visual", "mars"))
         image_path = WORK / f"shot-{index:03d}-{shot_no:02d}.png"
         video_path = WORK / f"shot-{index:03d}-{shot_no:02d}.mp4"
+
+        # Genuine NASA Curiosity rover-camera footage is used only for rover scenes.
+        # It is labelled on screen and is not presented as footage from The Martian.
+        if visual == "rover" and MARS_BROLL.exists():
+            font_path = find_font()
+            video_filter = (
+                f"scale=1280:720:force_original_aspect_ratio=increase,"
+                f"crop=1280:720,"
+                f"drawtext=fontfile={font_path}:text='REAL MARS ROVER CAMERA':"
+                "fontcolor=white:fontsize=38:box=1:boxcolor=black@0.55:"
+                "boxborderw=14:x=48:y=42,"
+                f"drawtext=fontfile={font_path}:text='NASA/JPL-Caltech':"
+                "fontcolor=white:fontsize=22:box=1:boxcolor=black@0.45:"
+                "boxborderw=8:x=48:y=h-62"
+            )
+            run([
+                "ffmpeg", "-y", "-stream_loop", "-1", "-i", str(MARS_BROLL),
+                "-t", f"{shot_duration:.3f}", "-vf", video_filter,
+                "-an", "-r", "25", "-c:v", "libx264", "-preset", "veryfast",
+                "-crf", "22", "-pix_fmt", "yuv420p", str(video_path)
+            ])
+            shot_paths.append(video_path)
+            continue
+
         make_card(scene_label(visual), visual, index, total, image_path)
         frames = max(1, round(shot_duration * 25))
         run([
